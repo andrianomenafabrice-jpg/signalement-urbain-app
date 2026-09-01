@@ -33,7 +33,16 @@ export function createApp(): Express {
 
   // Sert les photos uploadees localement en dev. En prod (Phase 8),
   // les photos sont sur Cloudinary et cette ligne devient inutile.
-  app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
+  // Cross-Origin-Resource-Policy assoupli ici uniquement : le frontend
+  // (autre origine) doit pouvoir charger ces images dans ses balises <img>.
+  app.use(
+    '/uploads',
+    express.static(path.join(process.cwd(), 'uploads'), {
+      setHeaders: (res) => {
+        res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+      },
+    })
+  );
 
   app.get('/api/health', (_req, res) => {
     res.json({ status: 'ok', db: mongoose.connection.readyState === 1 ? 'connecte' : 'deconnecte' });
