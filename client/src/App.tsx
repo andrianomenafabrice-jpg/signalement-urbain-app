@@ -5,6 +5,8 @@ import { queryClient } from './lib/queryClient';
 import { CartePage } from './pages/CartePage';
 import { ConnexionPage } from './pages/ConnexionPage';
 import { InscriptionPage } from './pages/InscriptionPage';
+import { MesSignalementsPage } from './pages/MesSignalementsPage';
+import { RoutePrivee } from './components/ui/RoutePrivee';
 
 function App() {
   return (
@@ -15,6 +17,14 @@ function App() {
             <Route path="/" element={<CartePage />} />
             <Route path="/connexion" element={<ConnexionPage />} />
             <Route path="/inscription" element={<InscriptionPage />} />
+            <Route
+              path="/mes-signalements"
+              element={
+                <RoutePrivee>
+                  <MesSignalementsPage />
+                </RoutePrivee>
+              }
+            />
           </Routes>
         </BrowserRouter>
       </QueryClientProvider>

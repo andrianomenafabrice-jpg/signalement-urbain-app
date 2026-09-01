@@ -8,12 +8,14 @@ import { FiltresCarte } from '../components/map/FiltresCarte';
 import { FormulaireSignalement } from '../components/report/FormulaireSignalement';
 import { ThemeToggle } from '../components/ui/ThemeToggle';
 import { useAuthStore } from '../store/authStore';
+import { useDeconnexion } from '../hooks/useAuth';
 import type { Categorie } from '../types/report';
 
 export function CartePage() {
   const [categorieActive, setCategorieActive] = useState<Categorie | null>(null);
   const [formulaireOuvert, setFormulaireOuvert] = useState(false);
   const utilisateur = useAuthStore((etat) => etat.user);
+  const deconnecter = useDeconnexion();
 
   function ouvrirFormulaire(): void {
     if (!utilisateur) {
@@ -38,7 +40,14 @@ export function CartePage() {
         <div className="flex items-center gap-3">
           <ThemeToggle />
           {utilisateur ? (
-            <span className="text-sm font-mono hidden sm:inline">{utilisateur.nom}</span>
+            <>
+              <Link to="/mes-signalements" className="text-sm underline hidden sm:inline">
+                Mes signalements
+              </Link>
+              <button type="button" onClick={() => void deconnecter()} className="text-sm underline">
+                Deconnexion
+              </button>
+            </>
           ) : (
             <Link to="/connexion" className="text-sm underline">Connexion</Link>
           )}
