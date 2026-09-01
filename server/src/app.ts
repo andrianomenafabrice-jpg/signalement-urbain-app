@@ -7,6 +7,7 @@ import rateLimit from 'express-rate-limit';
 import mongoose from 'mongoose';
 import { env } from './config/env';
 import { errorHandler, notFoundHandler } from './middlewares/errorHandler';
+import authRoutes from './modules/auth/auth.routes';
 
 export function createApp(): Express {
   const app = express();
@@ -25,8 +26,6 @@ export function createApp(): Express {
     app.use(morgan('dev'));
   }
 
-  // Limiteur global. Un limiteur specifique et plus strict sera ajoute
-  // sur POST /api/reports en Phase 3 (cible evidente pour le spam).
   const globalLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     limit: 300,
@@ -42,7 +41,9 @@ export function createApp(): Express {
     });
   });
 
-  // Les routes des modules auth/reports/admin arrivent en Phase 2 et 3.
+  app.use('/api/auth', authRoutes);
+
+  // Les routes reports/admin arrivent en Phase 3 et 6.
 
   app.use(notFoundHandler);
   app.use(errorHandler);
