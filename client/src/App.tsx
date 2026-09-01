@@ -6,7 +6,9 @@ import { CartePage } from './pages/CartePage';
 import { ConnexionPage } from './pages/ConnexionPage';
 import { InscriptionPage } from './pages/InscriptionPage';
 import { MesSignalementsPage } from './pages/MesSignalementsPage';
+import { AdminDashboardPage } from './pages/AdminDashboardPage';
 import { RoutePrivee } from './components/ui/RoutePrivee';
+import { RouteAdmin } from './components/ui/RouteAdmin';
 
 function App() {
   return (
@@ -23,6 +25,14 @@ function App() {
                 <RoutePrivee>
                   <MesSignalementsPage />
                 </RoutePrivee>
+              }
+            />
+            <Route
+              path="/admin"
+              element={
+                <RouteAdmin>
+                  <AdminDashboardPage />
+                </RouteAdmin>
               }
             />
           </Routes>

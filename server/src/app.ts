@@ -10,6 +10,7 @@ import { env } from './config/env';
 import { errorHandler, notFoundHandler } from './middlewares/errorHandler';
 import authRoutes from './modules/auth/auth.routes';
 import reportRoutes from './modules/reports/report.routes';
+import adminRoutes from './modules/admin/admin.routes';
 
 export function createApp(): Express {
   const app = express();
@@ -31,10 +32,6 @@ export function createApp(): Express {
   });
   app.use('/api', globalLimiter);
 
-  // Sert les photos uploadees localement en dev. En prod (Phase 8),
-  // les photos sont sur Cloudinary et cette ligne devient inutile.
-  // Cross-Origin-Resource-Policy assoupli ici uniquement : le frontend
-  // (autre origine) doit pouvoir charger ces images dans ses balises <img>.
   app.use(
     '/uploads',
     express.static(path.join(process.cwd(), 'uploads'), {
@@ -50,8 +47,7 @@ export function createApp(): Express {
 
   app.use('/api/auth', authRoutes);
   app.use('/api/reports', reportRoutes);
-
-  // Les routes admin arrivent en Phase 6.
+  app.use('/api/admin', adminRoutes);
 
   app.use(notFoundHandler);
   app.use(errorHandler);

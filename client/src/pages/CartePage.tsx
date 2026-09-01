@@ -41,6 +41,11 @@ export function CartePage() {
           <ThemeToggle />
           {utilisateur ? (
             <>
+              {utilisateur.role === 'admin' && (
+                <Link to="/admin" className="text-sm underline hidden sm:inline">
+                  Tableau de bord
+                </Link>
+              )}
               <Link to="/mes-signalements" className="text-sm underline hidden sm:inline">
                 Mes signalements
               </Link>

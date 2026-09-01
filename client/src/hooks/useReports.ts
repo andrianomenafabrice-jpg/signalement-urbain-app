@@ -9,10 +9,11 @@ interface FiltresListe {
 
 export function useSignalements(filtres: FiltresListe) {
   return useQuery({
-    queryKey: ['signalements', filtres.categorie ?? 'tous'],
+    queryKey: ['signalements', filtres.categorie ?? 'tous', filtres.statut ?? 'tous'],
     queryFn: async () => {
       const params: Record<string, string> = { limit: '100' };
       if (filtres.categorie) params.categorie = filtres.categorie;
+      if (filtres.statut) params.statut = filtres.statut;
       const { data } = await api.get<ReponsePaginee<Signalement>>('/reports', { params });
       return data.donnees;
     },
