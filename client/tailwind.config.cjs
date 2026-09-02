@@ -13,6 +13,8 @@ module.exports = {
         'marquage-dechets': '#6B7A3D',
         'marquage-eau': '#0E6FA6',
         'marquage-autre': '#6B5B7B',
+        'signal-succes': '#2F7D52',
+        'signal-erreur': '#C23B22',
       },
       fontFamily: {
         display: ['"Archivo"', 'sans-serif'],

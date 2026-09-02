@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Plus } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
@@ -35,26 +35,32 @@ export function CartePage() {
         />
       </Helmet>
 
-      <header className="px-4 py-3 flex items-center justify-between bg-beton dark:bg-bitume border-b border-encre-urbaine/10">
+      <header className="px-4 py-3 flex items-center justify-between bg-beton dark:bg-bitume border-b border-encre-urbaine/10 dark:border-beton/10">
         <h1 className="text-xl font-display font-bold">SignalUrbain</h1>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           <ThemeToggle />
           {utilisateur ? (
             <>
               {utilisateur.role === 'admin' && (
-                <Link to="/admin" className="text-sm underline hidden sm:inline">
+                <Link to="/admin" className="text-sm font-medium opacity-70 hover:opacity-100 transition-opacity hidden sm:inline">
                   Tableau de bord
                 </Link>
               )}
-              <Link to="/mes-signalements" className="text-sm underline hidden sm:inline">
+              <Link to="/mes-signalements" className="text-sm font-medium opacity-70 hover:opacity-100 transition-opacity hidden sm:inline">
                 Mes signalements
               </Link>
-              <button type="button" onClick={() => void deconnecter()} className="text-sm underline">
+              <button
+                type="button"
+                onClick={() => void deconnecter()}
+                className="text-sm font-medium opacity-70 hover:opacity-100 transition-opacity"
+              >
                 Deconnexion
               </button>
             </>
           ) : (
-            <Link to="/connexion" className="text-sm underline">Connexion</Link>
+            <Link to="/connexion" className="text-sm font-medium opacity-70 hover:opacity-100 transition-opacity">
+              Connexion
+            </Link>
           )}
         </div>
       </header>
@@ -64,14 +70,15 @@ export function CartePage() {
       <div className="relative flex-1">
         <CarteSignalements categorieActive={categorieActive} />
 
-        <button
+        <motion.button
           type="button"
           onClick={ouvrirFormulaire}
-          className="absolute bottom-6 right-4 z-[900] min-h-[52px] pl-4 pr-5 rounded-full bg-encre-urbaine text-beton dark:bg-beton dark:text-bitume font-medium flex items-center gap-2 shadow-lg"
+          whileTap={{ scale: 0.95 }}
+          className="absolute bottom-6 right-4 z-[900] min-h-[52px] pl-4 pr-5 rounded-full bg-encre-urbaine text-beton dark:bg-beton dark:text-bitume font-medium flex items-center gap-2 shadow-lg hover:shadow-xl transition-shadow"
         >
           <Plus size={20} />
           Signaler
-        </button>
+        </motion.button>
       </div>
 
       <AnimatePresence>

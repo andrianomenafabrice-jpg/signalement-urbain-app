@@ -27,24 +27,24 @@ export function MarkerMarquage({ signalement }: Props) {
 
   return (
     <Marker position={[latitude, longitude]} icon={icone}>
-      <Popup>
-        <div className="font-body min-w-[200px]">
+      <Popup minWidth={220}>
+        <div className="font-body">
           {signalement.photos[0] && (
             <img
               src={`${urlBase}${signalement.photos[0]}`}
               alt={signalement.titre}
-              className="w-full h-24 object-cover rounded mb-2"
+              className="w-full h-28 object-cover rounded-md mb-2.5"
             />
           )}
-          <div className="flex items-center gap-2 mb-1">
-            <span className={`w-3 h-3 rounded-full ${meta.couleur}`} />
-            <span className="text-sm font-medium">{meta.label}</span>
+          <div className="flex items-center gap-1.5 mb-1.5">
+            <span className={`w-2.5 h-2.5 rounded-full ${meta.couleur}`} />
+            <span className="text-xs font-medium opacity-70">{meta.label}</span>
           </div>
-          <h3 className="font-display font-bold text-base mb-1">{signalement.titre}</h3>
-          <p className="text-sm mb-2">{signalement.description}</p>
-          <p className="font-mono text-xs tabular-nums">
+          <h3 className="font-display font-bold text-[15px] leading-snug mb-1.5">{signalement.titre}</h3>
+          <p className="text-sm opacity-80 mb-2.5">{signalement.description}</p>
+          <span className="inline-flex items-center gap-1 font-mono text-xs tabular-nums px-2 py-1 rounded-full bg-encre-urbaine/8">
             {PASTILLE_STATUT[signalement.statut]} {LABEL_STATUT[signalement.statut]}
-          </p>
+          </span>
         </div>
       </Popup>
     </Marker>

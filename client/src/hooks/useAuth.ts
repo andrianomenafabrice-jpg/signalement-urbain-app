@@ -1,5 +1,6 @@
 import { useAuthStore } from '../store/authStore';
 import { api } from '../lib/api';
+import { toast } from '../lib/toast';
 
 export function useDeconnexion() {
   const clearSession = useAuthStore((etat) => etat.clearSession);
@@ -12,6 +13,7 @@ export function useDeconnexion() {
       // on nettoie la session cote client dans tous les cas.
     } finally {
       clearSession();
+      toast.succes('A bientot !');
     }
   };
 }

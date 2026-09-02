@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../lib/api';
+import { toast } from '../lib/toast';
 import type { Signalement, ReponsePaginee, Categorie, Statut } from '../types/report';
 
 interface FiltresListe {
@@ -63,6 +64,10 @@ export function useCreerSignalement() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['signalements'] });
       queryClient.invalidateQueries({ queryKey: ['mes-signalements'] });
+      toast.succes('Signalement envoye, merci pour ta vigilance !');
+    },
+    onError: () => {
+      toast.erreur("Le signalement n'a pas pu etre envoye, reessaie.");
     },
   });
 }

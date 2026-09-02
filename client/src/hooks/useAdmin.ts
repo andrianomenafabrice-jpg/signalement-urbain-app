@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../lib/api';
+import { toast } from '../lib/toast';
 import type { StatistiquesGlobales } from '../types/admin';
 import type { Signalement, Statut } from '../types/report';
 
@@ -25,6 +26,10 @@ export function useChangerStatutAdmin() {
       queryClient.invalidateQueries({ queryKey: ['signalements'] });
       queryClient.invalidateQueries({ queryKey: ['mes-signalements'] });
       queryClient.invalidateQueries({ queryKey: ['admin-stats'] });
+      toast.succes('Statut mis a jour.');
+    },
+    onError: () => {
+      toast.erreur('Impossible de changer le statut, reessaie.');
     },
   });
 }

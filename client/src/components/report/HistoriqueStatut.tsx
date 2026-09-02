@@ -1,15 +1,15 @@
 import type { EntreeHistorique, Statut } from '../../types/report';
 
-const PASTILLE: Record<Statut, string> = {
-  signale: '○',
-  en_cours: '◐',
-  resolu: '●',
-};
-
 const LABEL: Record<Statut, string> = {
   signale: 'Signale',
   en_cours: 'Pris en charge',
   resolu: 'Resolu',
+};
+
+const COULEUR: Record<Statut, string> = {
+  signale: 'bg-marquage-voirie',
+  en_cours: 'bg-marquage-eclairage',
+  resolu: 'bg-signal-succes',
 };
 
 function formaterDate(iso: string): string {
@@ -28,16 +28,22 @@ interface Props {
 
 export function HistoriqueStatut({ historique }: Props) {
   return (
-    <ol className="space-y-3">
-      {historique.map((entree, index) => (
-        <li key={`${entree.statut}-${entree.date}-${index}`} className="flex gap-3">
-          <span className="font-mono text-lg leading-none w-5 shrink-0">{PASTILLE[entree.statut]}</span>
-          <div>
-            <p className="text-sm font-medium">{LABEL[entree.statut]}</p>
-            <p className="font-mono text-xs tabular-nums opacity-70">{formaterDate(entree.date)}</p>
-          </div>
-        </li>
-      ))}
+    <ol className="relative">
+      {historique.map((entree, index) => {
+        const dernier = index === historique.length - 1;
+        return (
+          <li key={`${entree.statut}-${entree.date}-${index}`} className="relative pl-7 pb-5 last:pb-0">
+            {!dernier && (
+              <span className="absolute left-[7px] top-4 bottom-0 w-px bg-encre-urbaine/15 dark:bg-beton/15" />
+            )}
+            <span
+              className={`absolute left-0 top-1 w-3.5 h-3.5 rounded-full ${COULEUR[entree.statut]} ring-4 ring-beton dark:ring-bitume`}
+            />
+            <p className="text-sm font-medium leading-tight">{LABEL[entree.statut]}</p>
+            <p className="font-mono text-xs tabular-nums opacity-60 mt-0.5">{formaterDate(entree.date)}</p>
+          </li>
+        );
+      })}
     </ol>
   );
 }

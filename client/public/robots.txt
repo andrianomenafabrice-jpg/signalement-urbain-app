@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /connexion
+Disallow: /inscription
+Disallow: /mes-signalements
+Disallow: /admin
+
+Sitemap: https://signalurbain.exemple.com/sitemap.xml
