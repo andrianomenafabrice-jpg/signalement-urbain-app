@@ -105,7 +105,17 @@ export async function changerStatutSignalement(id: string, nouveauStatut: Statut
     throw new AppError('SIGNALEMENT_INTROUVABLE', 'Signalement introuvable.', 404);
   }
 
-  const etatActuel: EtatSignalement = { statut: report.statut, historiqueStatuts: report.historiqueStatuts };
+  // Pont Mongoose -> logique pure : parId passe d'ObjectId a string,
+  // car statut.service.ts ne doit rien connaitre de Mongoose (Phase 3).
+  const etatActuel: EtatSignalement = {
+    statut: report.statut,
+    historiqueStatuts: report.historiqueStatuts.map((entree) => ({
+      statut: entree.statut,
+      date: entree.date,
+      parId: entree.parId.toString(),
+    })),
+  };
+
   const resultat = appliquerTransition(etatActuel, nouveauStatut, adminId);
 
   if (!resultat.succes) {
@@ -113,7 +123,12 @@ export async function changerStatutSignalement(id: string, nouveauStatut: Statut
   }
 
   report.statut = resultat.etat.statut;
-  report.historiqueStatuts = resultat.etat.historiqueStatuts as typeof report.historiqueStatuts;
+  report.historiqueStatuts = resultat.etat.historiqueStatuts.map((entree) => ({
+    statut: entree.statut,
+    date: entree.date,
+    parId: new mongoose.Types.ObjectId(entree.parId),
+  })) as typeof report.historiqueStatuts;
+
   await report.save();
 
   const auteur = await User.findById(report.auteurId).select('nom email');

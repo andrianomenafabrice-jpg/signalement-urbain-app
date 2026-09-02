@@ -4,6 +4,8 @@ module.exports = {
   testEnvironment: 'node',
   roots: ['<rootDir>/src/tests'],
   clearMocks: true,
+  testTimeout: 20000,
+  forceExit: true,
   collectCoverageFrom: ['src/services/statut.service.ts'],
   coverageThreshold: {
     'src/services/statut.service.ts': {

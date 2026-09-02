@@ -48,3 +48,7 @@ export async function envoyerEmailChangementStatut({
     `,
   });
 }
+
+export function fermerTransporteurEmail(): void {
+  transporter.close();
+}
