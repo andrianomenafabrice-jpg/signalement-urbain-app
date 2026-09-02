@@ -25,7 +25,6 @@ export function MesSignalementsPage() {
   const [statutActif, setStatutActif] = useState<Statut | null>(null);
   const [ouvert, setOuvert] = useState<string | null>(null);
   const { data: signalements, isLoading, isError } = useMesSignalements({ statut: statutActif });
-  const urlBase = (import.meta.env.VITE_API_URL as string).replace(/\/api\/?$/, '');
 
   const statuts: Statut[] = ['signale', 'en_cours', 'resolu'];
 
@@ -117,7 +116,7 @@ export function MesSignalementsPage() {
               >
                 {signalement.photos[0] ? (
                   <img
-                    src={`${urlBase}${signalement.photos[0]}`}
+                    src={signalement.photos[0]}
                     alt=""
                     className="w-14 h-14 rounded-lg object-cover shrink-0"
                   />

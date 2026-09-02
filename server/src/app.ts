@@ -1,5 +1,4 @@
 import express, { Express } from 'express';
-import path from 'path';
 import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
@@ -31,15 +30,6 @@ export function createApp(): Express {
     legacyHeaders: false,
   });
   app.use('/api', globalLimiter);
-
-  app.use(
-    '/uploads',
-    express.static(path.join(process.cwd(), 'uploads'), {
-      setHeaders: (res) => {
-        res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
-      },
-    })
-  );
 
   app.get('/api/health', (_req, res) => {
     res.json({ status: 'ok', db: mongoose.connection.readyState === 1 ? 'connecte' : 'deconnecte' });

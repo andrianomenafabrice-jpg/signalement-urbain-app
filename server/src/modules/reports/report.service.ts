@@ -1,4 +1,3 @@
-import fs from 'fs/promises';
 import mongoose from 'mongoose';
 import Report, { IReport } from '../../models/Report';
 import User from '../../models/User';
@@ -6,6 +5,7 @@ import { AppError } from '../../middlewares/errorHandler';
 import { appliquerTransition, EtatSignalement, Statut } from '../../services/statut.service';
 import { CreateReportInput, ListReportsQuery } from './report.validation';
 import { verifierSignatureImage } from '../../utils/fileSignature';
+import { televerserPhoto } from '../../utils/cloudinaryUpload';
 import { envoyerEmailChangementStatut } from '../../services/email.service';
 
 interface CreerReportParams {
@@ -19,13 +19,12 @@ export async function creerSignalement({ input, auteurId, fichier }: CreerReport
     throw new AppError('PHOTO_REQUISE', 'Une photo est requise pour creer un signalement.', 400);
   }
 
-  const signatureValide = await verifierSignatureImage(fichier.path, fichier.mimetype);
+  const signatureValide = verifierSignatureImage(fichier.buffer, fichier.mimetype);
   if (!signatureValide) {
-    await fs.unlink(fichier.path).catch(() => undefined);
     throw new AppError('FICHIER_INVALIDE', 'Le contenu du fichier ne correspond pas a une image valide.', 400);
   }
 
-  const urlPhoto = `/uploads/${fichier.filename}`;
+  const urlPhoto = await televerserPhoto(fichier.buffer);
 
   const report = await Report.create({
     titre: input.titre,
@@ -105,8 +104,6 @@ export async function changerStatutSignalement(id: string, nouveauStatut: Statut
     throw new AppError('SIGNALEMENT_INTROUVABLE', 'Signalement introuvable.', 404);
   }
 
-  // Pont Mongoose -> logique pure : parId passe d'ObjectId a string,
-  // car statut.service.ts ne doit rien connaitre de Mongoose (Phase 3).
   const etatActuel: EtatSignalement = {
     statut: report.statut,
     historiqueStatuts: report.historiqueStatuts.map((entree) => ({

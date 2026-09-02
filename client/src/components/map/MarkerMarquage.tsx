@@ -23,7 +23,6 @@ export function MarkerMarquage({ signalement }: Props) {
   const [longitude, latitude] = signalement.location.coordinates;
   const meta = getCategorie(signalement.categorie);
   const icone = creerIconeMarquage(signalement._id, signalement.categorie, signalement.statut);
-  const urlBase = (import.meta.env.VITE_API_URL as string).replace(/\/api\/?$/, '');
 
   return (
     <Marker position={[latitude, longitude]} icon={icone}>
@@ -31,7 +30,7 @@ export function MarkerMarquage({ signalement }: Props) {
         <div className="font-body">
           {signalement.photos[0] && (
             <img
-              src={`${urlBase}${signalement.photos[0]}`}
+              src={signalement.photos[0]}
               alt={signalement.titre}
               className="w-full h-28 object-cover rounded-md mb-2.5"
             />
