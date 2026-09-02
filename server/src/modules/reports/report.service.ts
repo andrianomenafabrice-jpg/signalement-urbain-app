@@ -1,6 +1,7 @@
 import fs from 'fs/promises';
 import mongoose from 'mongoose';
 import Report, { IReport } from '../../models/Report';
+import User from '../../models/User';
 import { AppError } from '../../middlewares/errorHandler';
 import { appliquerTransition, EtatSignalement, Statut } from '../../services/statut.service';
 import { CreateReportInput, ListReportsQuery } from './report.validation';
@@ -24,8 +25,6 @@ export async function creerSignalement({ input, auteurId, fichier }: CreerReport
     throw new AppError('FICHIER_INVALIDE', 'Le contenu du fichier ne correspond pas a une image valide.', 400);
   }
 
-  // En dev, l'URL pointe vers le fichier local servi par Express.
-  // En prod (Phase 8), remplace par l'URL retournee par Cloudinary.
   const urlPhoto = `/uploads/${fichier.filename}`;
 
   const report = await Report.create({
@@ -117,9 +116,16 @@ export async function changerStatutSignalement(id: string, nouveauStatut: Statut
   report.historiqueStatuts = resultat.etat.historiqueStatuts as typeof report.historiqueStatuts;
   await report.save();
 
-  envoyerEmailChangementStatut(report).catch((erreur) => {
-    console.error("Echec de l'envoi de l'email de notification :", erreur);
-  });
+  const auteur = await User.findById(report.auteurId).select('nom email');
+  if (auteur) {
+    envoyerEmailChangementStatut({
+      destinataireEmail: auteur.email,
+      destinataireNom: auteur.nom,
+      report,
+    }).catch((erreur) => {
+      console.error("Echec de l'envoi de l'email de notification :", erreur);
+    });
+  }
 
   return report;
 }
