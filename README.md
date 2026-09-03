@@ -33,7 +33,7 @@ API sur http://localhost:4000, frontend sur http://localhost:5173.
 
 ## Statut du projet
 
-- [x] Phase 1 — Setup monorepo, connexion MongoDB Atlas, tokens de design
+- [ ] Phase 1 — Setup monorepo, connexion MongoDB Atlas, tokens de design
 - [ ] Phase 2 — Modèles Mongoose + authentification
 - [ ] Phase 3 — Logique de transition de statut + API REST signalements
 - [ ] Phase 4 — Formulaire de création + carte interactive
