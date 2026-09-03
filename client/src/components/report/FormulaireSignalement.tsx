@@ -17,7 +17,7 @@ const schema = z.object({
   titre: z.string().trim().min(3, 'Le titre doit contenir au moins 3 caracteres.').max(120),
   description: z.string().trim().min(10, 'Decris le probleme en quelques mots de plus.'),
   categorie: z.enum(['voirie', 'eclairage', 'dechets', 'eau', 'autre'], {
-    errorMap: () => ({ message: 'Choisis une categorie.' }),
+    error: 'Choisis une categorie.',
   }),
 });
 
@@ -202,6 +202,10 @@ export function FormulaireSignalement({ onFerme, onCree }: Props) {
               onChange={(lat, lon) => setPosition({ latitude: lat, longitude: lon })}
             />
           </div>
+
+          {creerSignalement.isError && (
+            <p className="text-sm text-signal-erreur">Une erreur est survenue, reessaie dans un instant.</p>
+          )}
 
           <Bouton type="submit" chargement={creerSignalement.isPending} disabled={!photo} className="w-full">
             Envoyer le signalement
